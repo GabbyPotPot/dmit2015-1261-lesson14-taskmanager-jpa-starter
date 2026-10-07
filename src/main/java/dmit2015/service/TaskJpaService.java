@@ -15,14 +15,13 @@ import java.util.UUID;
 @ApplicationScoped
 public class TaskJpaService implements TaskService {
 
-
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     @Transactional
     public Task createTask(Task task) {
-        // generate a new random task id
+        // Generate a new random task id
         task.setId(UUID.randomUUID().toString());
         entityManager.persist(task);
         return task;
@@ -59,6 +58,7 @@ public class TaskJpaService implements TaskService {
         } else {
             var existingTask = optionalTask.orElseThrow();
             // Update only properties that is editable by the end user
+
             existingTask.setDescription(task.getDescription());
             existingTask.setPriority(task.getPriority());
             existingTask.setDone(task.isDone());
@@ -78,6 +78,14 @@ public class TaskJpaService implements TaskService {
         } else {
             throw new RuntimeException("Could not find Task with id: " + id);
         }
+    }
+
+    @Override
+    public long count() {
+        return (long) entityManager.createQuery("""
+select count(t)
+from Task t
+""").getSingleResult();
     }
 
 }

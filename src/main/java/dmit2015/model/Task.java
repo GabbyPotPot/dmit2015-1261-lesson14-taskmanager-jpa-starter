@@ -48,6 +48,7 @@ public class Task {
     void onUpdate() {
         updateTime = LocalDateTime.now();
     }
+
     // Copy constructor
     public Task(Task other) {
         this.id = other.getId();
